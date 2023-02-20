@@ -1,7 +1,7 @@
 const { nanoid } = require('nanoid');
 const books = require('./books');
 
-const saveNewBook = (request, h) => {
+const addNewBook = (request, h) => {
   const {
     name,
     year,
@@ -76,80 +76,71 @@ const saveNewBook = (request, h) => {
 const getAllBooks = (request, h) => {
   const { name, reading, finished } = request.query;
 
-  switch (reading) {
-    case '1': {
-      const filteredBook = books.filter((book) => book.reading);
+  if (reading === '1') {
+    const readingFilter = books.filter((book) => book.reading);
 
-      const response = h.response({
-        status: 'success',
-        data: {
-          books: filteredBook.map((book) => ({
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher,
-          })),
-        },
-      });
-      response.code(200);
-      return response;
-    }
-    case '0': {
-      const filteredBook = books.filter((book) => !book.reading);
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: readingFilter.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        })),
+      },
+    });
+    response.code(200);
+    return response;
+  }
+  if (reading === '0') {
+    const readingFilter = books.filter((book) => !book.reading);
 
-      const response = h.response({
-        status: 'success',
-        data: {
-          books: filteredBook.map((book) => ({
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher,
-          })),
-        },
-      });
-      response.code(200);
-      return response;
-    }
-    default:
-      break;
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: readingFilter.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        })),
+      },
+    });
+    response.code(200);
+    return response;
   }
 
-  switch (finished) {
-    case '1': {
-      const filteredBook = books.filter((book) => book.finished);
+  if (finished === '1') {
+    const finishedFilter = books.filter((book) => book.finished);
 
-      const response = h.response({
-        status: 'success',
-        data: {
-          books: filteredBook.map((book) => ({
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher,
-          })),
-        },
-      });
-      response.code(200);
-      return response;
-    }
-    case '0': {
-      const filteredBook = books.filter((book) => !book.finished);
-
-      const response = h.response({
-        status: 'success',
-        data: {
-          books: filteredBook.map((book) => ({
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher,
-          })),
-        },
-      });
-      response.code(200);
-      return response;
-    }
-    default:
-      break;
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: finishedFilter.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        })),
+      },
+    });
+    response.code(200);
+    return response;
   }
+  if (finished === '0') {
+    const finishedFilter = books.filter((book) => !book.finished);
 
+    const response = h.response({
+      status: 'success',
+      data: {
+        books: finishedFilter.map((book) => ({
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        })),
+      },
+    });
+    response.code(200);
+    return response;
+  }
   if (name) {
     const filteredName = books
       .filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
@@ -190,7 +181,7 @@ const getBookById = (request, h) => {
     return {
       status: 'success',
       data: {
-        book: selectedBook,
+        books: selectedBook,
       },
     };
   }
@@ -202,7 +193,7 @@ const getBookById = (request, h) => {
   return response;
 };
 
-const editBookData = (request, h) => {
+const editBook = (request, h) => {
   const { bookId } = request.params;
   const {
     name,
@@ -265,7 +256,7 @@ const editBookData = (request, h) => {
   return response;
 };
 
-const deleteBookData = (request, h) => {
+const deleteBook = (request, h) => {
   const { bookId } = request.params;
 
   const index = books.findIndex((book) => book.id === bookId);
@@ -289,9 +280,9 @@ const deleteBookData = (request, h) => {
 };
 
 module.exports = {
-  saveNewBook,
+  addNewBook,
   getAllBooks,
   getBookById,
-  editBookData,
-  deleteBookData,
+  editBook,
+  deleteBook,
 };
