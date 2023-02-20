@@ -181,7 +181,7 @@ const getBookById = (request, h) => {
     return {
       status: 'success',
       data: {
-        books: selectedBook,
+        book: selectedBook,
       },
     };
   }
